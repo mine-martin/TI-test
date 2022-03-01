@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Col, Container, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
-function UserLists() {
+function UserLists(props) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user] = useState(' ');
+  const history = useNavigate();
 
   useEffect(() => {
     fetch(`https://ti-react-test.herokuapp.com/users`)
@@ -12,10 +14,14 @@ function UserLists() {
       .then((data) => {
         setUsers(data);
         setLoading(false);
-        console.log(data);
+        // console.log(data);
       })
       .catch((err) => console.error(err.message));
   }, [user]);
+
+  const handleClick = (id) => {
+    history(`user/${id}`);
+  };
 
   return (
     <div>
@@ -27,11 +33,12 @@ function UserLists() {
         )}
 
         {loading ? (
-          <h3 className="text-6xl text-center mx-auto mt-32">...Loading</h3>
+          //   <h3 className="text-6xl text-center mx-auto mt-32">...Loading</h3>
+          <Spinner className="ml-auto" animation="grow" variant="success" />
         ) : (
           <>
             {users.map((user) => (
-              <Card key={user.id}>
+              <Card key={user.id} className="mt-3">
                 <Row>
                   <Col>
                     <Card>
@@ -40,6 +47,16 @@ function UserLists() {
                         <Card.Subtitle>{user.occupation}</Card.Subtitle>
                         <Card.Text>{user.bio}</Card.Text>
                         <Card.Link>{user.email}</Card.Link>
+                        <Card.Text className="mt-4">
+                          <Card.Link onClick={() => handleClick(user.id)}>
+                            <Button
+                              className="text-center"
+                              variant="outline-secondary"
+                            >
+                              More Info
+                            </Button>
+                          </Card.Link>
+                        </Card.Text>
                       </Card.Body>
                     </Card>
                   </Col>

@@ -1,13 +1,18 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import UserDetails from './component/UserDetails';
-// import { BrowserRouter as Router, Routes, Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
 import UserLists from './component/UserLists';
+import UserDetails from './component/UserDetails';
 
 function App() {
   return (
     <div className="App">
-      <UserLists />
-      <UserDetails />
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<UserLists />} />
+          <Route exact path="/user/:id" element={<UserDetails />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
