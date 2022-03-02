@@ -5,11 +5,7 @@ const Header = () => {
   return (
     <Navbar style={{ background: '#e1e1e1' }}>
       <Container>
-        <Navbar.Brand>
-          <h3>
-            Users Database <a href="/">Home</a>
-          </h3>
-        </Navbar.Brand>
+        Users Database <a href="/">Home</a>
       </Container>
     </Navbar>
   );
