@@ -51,7 +51,7 @@ const UserDetails = (props) => {
           email,
         })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           setName(res.name);
           setOccupation(res.occupation);
           setBio(res.bio);
