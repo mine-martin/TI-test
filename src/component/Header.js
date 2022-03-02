@@ -6,7 +6,9 @@ const Header = () => {
     <Navbar style={{ background: '#e1e1e1' }}>
       <Container>
         <Navbar.Brand>
-          <h3>Users Database</h3>
+          <h3>
+            Users Database <a href="/">Home</a>
+          </h3>
         </Navbar.Brand>
       </Container>
     </Navbar>
