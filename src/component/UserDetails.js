@@ -1,6 +1,14 @@
 import axios from 'axios';
 import { React, useEffect, useState } from 'react';
-import { Card, Col, Container, Form, Row } from 'react-bootstrap';
+import {
+  Alert,
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  Row,
+} from 'react-bootstrap';
 import { useMatch } from 'react-router-dom';
 
 const UserDetails = (props) => {
@@ -8,40 +16,58 @@ const UserDetails = (props) => {
     params: { id },
   } = useMatch('user/:id');
 
-  const [name, setName] = useState('');
-  const [occupation, setoccupation] = useState('');
-  const [bio, setBio] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState();
+  const [occupation, setOccupation] = useState();
+  const [bio, setBio] = useState();
+  const [email, setEmail] = useState();
 
   const [user, setUser] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // fetch(`https://ti-react-test.herokuapp.com/users/${id}`)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     setUser(data);
-    //     setLoading(false);
-    //   });
     const getUser = async () => {
       try {
         const result = await axios.get(
           `https://ti-react-test.herokuapp.com/users/${id}`
         );
         setUser(result.data);
-
-        setName(result.data.name);
-        setoccupation(result.data.name);
-        setBio(result.data.bio);
-        setEmail(result.data.email);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
-      //   setLoading(false);
     };
     getUser();
   }, [id]);
-  console.log(user.name);
+  // console.log(user);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    try {
+      axios
+        .patch(`https://ti-react-test.herokuapp.com/users/${id}`, {
+          name,
+          occupation,
+          bio,
+          email,
+        })
+        .then((res) => {
+          console.log(res);
+          setName(res.name);
+          setOccupation(res.occupation);
+          setBio(res.bio);
+          setEmail(res.email);
+          // setLoading(false);
+
+          function refreshPage() {
+            window.alert('Updated Successfully');
+            window.location.reload(false);
+          }
+          refreshPage();
+        });
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
   return (
     <div>
       <Container>
@@ -57,10 +83,20 @@ const UserDetails = (props) => {
             </Card>
           </Col>
           <Col>
-            <Form className="mt-3">
+            <Alert className="mt-2" style={{ background: '#e1e1e1' }}>
+              Change User Info
+            </Alert>
+
+            <Form className="mt-3" onSubmit={handleSubmit}>
               <Form.Group className="mb-3">
                 <Form.Label>Name</Form.Label>
-                <Form.Control id="name" type="text" placeholder="Enter name" />
+                <Form.Control
+                  id="name"
+                  type="text"
+                  placeholder="Enter name"
+                  defaultValue={user.name}
+                  onChange={(e) => setName(e.target.value)}
+                />
               </Form.Group>
 
               <Form.Group className="mb-3">
@@ -69,12 +105,21 @@ const UserDetails = (props) => {
                   id="occupation"
                   type="text"
                   placeholder="Enter occupation"
+                  defaultValue={user.occupation}
+                  onChange={(e) => setOccupation(e.target.value)}
                 />
               </Form.Group>
 
               <Form.Group className="mb-3">
                 <Form.Label>Bio</Form.Label>
-                <Form.Control id="bio" type="text" placeholder="Enter bio" />
+                <Form.Control
+                  style={{ height: '15rem' }}
+                  id="bio"
+                  as="textarea"
+                  placeholder="Enter bio"
+                  defaultValue={user.bio}
+                  onChange={(e) => setBio(e.target.value)}
+                />
               </Form.Group>
 
               <Form.Group className="mb-3">
@@ -83,15 +128,17 @@ const UserDetails = (props) => {
                   id="email"
                   type="text"
                   placeholder="Enter email"
+                  defaultValue={user.email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Form.Group>
-              {/* <Button
+              <Button
                 type="submit"
-                onClick={() => handleSubmit}
+                onClick={handleSubmit}
                 variant="outline-secondary"
               >
                 Submit
-              </Button> */}
+              </Button>
             </Form>
           </Col>
         </Row>

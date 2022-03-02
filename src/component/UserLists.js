@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-function UserLists(props) {
+const UserLists = (props) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user] = useState(' ');
@@ -68,6 +68,6 @@ function UserLists(props) {
       </Container>
     </div>
   );
-}
+};
 
 export default UserLists;
